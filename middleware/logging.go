@@ -1,15 +1,16 @@
 package middleware
 
 import (
- "fmt"
- "net/http"
+	"net/http"
+	"project/logger"
+
+	"go.uber.org/zap"
 )
 
 func Logging(next http.Handler) http.Handler {
- return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
+        logger.L.Info("Logging middleware",zap.String("method",r.Method), zap.String("path",r.URL.Path))
 
-  fmt.Println(r.Method, r.URL.Path)
-
-  next.ServeHTTP(w, r)
- })
+		next.ServeHTTP(w, r)
+	})
 }
